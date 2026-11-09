@@ -1,6 +1,6 @@
 # Uncertainty-based complexity measures for class imbalance
 
-Code and results for the paper *Measuring class imbalance complexity through classifier uncertainty: when does oversampling pay off?* (Fatih Sağlam, submitted to Knowledge-Based Systems).
+Code and results for the paper *Measuring class imbalance complexity through classifier uncertainty: when does oversampling pay off?* (Fatih Sağlam).
 
 The paper proposes classifier-aware complexity measures for class imbalance. They split each training case's out-of-bag error into an aleatoric part (label noise and overlap) and an epistemic part (disagreement between the model and a class-balanced local posterior). The main measure is the soft-split epistemic measure with a class-balanced 15-neighbour vote. The repository also contains the analysis of whether the measure tells when oversampling pays off.
 
