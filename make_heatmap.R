@@ -3,7 +3,7 @@
 ## Kesifsel karar izgarasi: EU (sb_min ve sb_diff) x AU (sb_bal), 3x3.
 ## Her hucre: ortalama SMOTE G-mean kazanci, kazanc > 0.02 olan cift payi, n.
 ## Renk: pay < %25 "do not oversample", > %75 "oversample", arasi "uncertain".
-## Calistirma (proje kok klasorunden): source("make_heatmap.R")
+## Calistirma (proje kok klasorunden): source("manuscript/make_heatmap.R")
 ## Girdi : results/real_gains.csv   Cikti: manuscript/figures/fig_real_heatmap.pdf (+ CSV'ler)
 ## Gerekli paket: ggplot2
 ## =====================================================================
@@ -18,7 +18,8 @@ r <- read.csv(REAL, stringsAsFactors = FALSE)
 r$gain <- r$gain_SMOTE_GMEAN
 au_cut <- quantile(r$AUsb_bal, c(0, 1/3, 2/3, 1))
 au_cut[1] <- au_cut[1] - 1e-9
-r$AU <- cut(r$AUsb_bal, au_cut, labels = c("low", "medium", "high"))
+au_lab <- c(sprintf("low\n(<= %.3f)", au_cut[2]), sprintf("medium\n(%.3f to %.3f)", au_cut[2], au_cut[3]), sprintf("high\n(> %.3f)", au_cut[3]))
+r$AU <- cut(r$AUsb_bal, au_cut, labels = au_lab)
 
 ## Panel tanimlari: olcut, esikler, etiket (esikler: Youden esigi ve ikinci kesim)
 SPEC <- list(
@@ -40,7 +41,7 @@ cells <- do.call(rbind, lapply(SPEC, function(s) {
 }))
 cells$class <- ifelse(is.na(cells$share), "uncertain",
                 ifelse(cells$share < LOW, "do not oversample", ifelse(cells$share > HIGH, "oversample", "uncertain")))
-cells$a <- factor(cells$a, levels = c("low", "medium", "high"))   # ggplot: ilk duzey altta
+cells$a <- factor(cells$a, levels = au_lab)   # ggplot: ilk duzey altta
 cells$e <- factor(cells$e, levels = unique(cells$e))                # esik sirasini koru
 cells$txt <- sprintf("gain %.2f, %.0f%% worth\n(n = %d)", cells$gain, 100 * cells$share, cells$n)
 cells$lab <- ifelse(cells$class == "do not oversample", "do not\noversample", cells$class)
