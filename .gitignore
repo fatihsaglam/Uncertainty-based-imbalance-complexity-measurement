@@ -16,3 +16,4 @@ manuscript/*.blg
 manuscript/*.bbl
 manuscript/*.spl
 manuscript/*.synctex.gz
+manuscript/
